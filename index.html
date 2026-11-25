@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>이사할까?</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --muted: #59636e;
+  --line: #d0d7de;
+  --soft: #f6f8fa;
+  --link: #0a58ca;
+  --mark-bg: #ffe066;
+  --mark-fg: #1f2328;
+  --banner-bg: #8a1c1c;
+  --banner-fg: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --fg: #e6e8eb;
+    --muted: #a0a8b0;
+    --line: #3a414a;
+    --soft: #1b2027;
+    --link: #8ab4f8;
+    --mark-bg: #6b5300;
+    --mark-fg: #fff4c2;
+    --banner-bg: #f2b8b5;
+    --banner-fg: #3b0a08;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+header.site, main, footer.site { max-width: 44rem; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+header.site { padding-top: 20px; font-weight: 700; }
+header.site a { color: var(--fg); text-decoration: none; }
+main { padding-top: 4px; padding-bottom: 32px; }
+footer.site { border-top: 1px solid var(--line); padding-top: 12px; padding-bottom: 40px; }
+footer.site ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+h1 { font-size: 1.6rem; line-height: 1.35; margin: 16px 0 12px; }
+h2 { font-size: 1.25rem; line-height: 1.4; margin: 36px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; line-height: 1.45; margin: 24px 0 8px; }
+p, ul, ol, blockquote, .table-wrap { margin: 0 0 14px; }
+ul, ol { padding-left: 1.4em; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+a { color: var(--link); text-underline-offset: 2px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; word-break: break-all; }
+blockquote { margin-left: 0; margin-right: 0; padding: 10px 14px; border-left: 4px solid var(--line); background: var(--soft); color: var(--muted); }
+blockquote > :last-child { margin-bottom: 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 0.94rem; line-height: 1.6; }
+th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; min-width: 5em; }
+th { background: var(--soft); }
+mark { background: var(--mark-bg); color: var(--mark-fg); padding: 0 2px; border-radius: 3px; }
+.preview-banner { position: sticky; top: 0; z-index: 1; margin: 0; padding: 8px 16px; background: var(--banner-bg); color: var(--banner-fg); font-weight: 700; text-align: center; }
+blockquote.draft { border: 2px dashed var(--banner-bg); border-left-width: 6px; color: var(--fg); }
+.page-list { padding-left: 1.2em; }
+</style>
+</head>
+<body>
+<main>
+<h1>이사할까?</h1>
+<p>지금 집에서 다른 집으로 옮겨도 괜찮을지 기기 안에서만 계산해 보는 참고용 계산기예요.</p>
+<ul class="page-list">
+<li><a href="privacy/">개인정보 처리방침</a></li>
+<li><a href="support/">문의와 도움말</a></li>
+<li><a href="method/">계산 방식</a></li>
+</ul>
+</main>
+</body>
+</html>

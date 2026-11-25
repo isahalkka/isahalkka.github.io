@@ -1,0 +1,414 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; base-uri 'none'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>계산 방식 · 이사할까?</title>
+<style>
+:root {
+  color-scheme: light dark;
+  --bg: #ffffff;
+  --fg: #1f2328;
+  --muted: #59636e;
+  --line: #d0d7de;
+  --soft: #f6f8fa;
+  --link: #0a58ca;
+  --mark-bg: #ffe066;
+  --mark-fg: #1f2328;
+  --banner-bg: #8a1c1c;
+  --banner-fg: #ffffff;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111418;
+    --fg: #e6e8eb;
+    --muted: #a0a8b0;
+    --line: #3a414a;
+    --soft: #1b2027;
+    --link: #8ab4f8;
+    --mark-bg: #6b5300;
+    --mark-fg: #fff4c2;
+    --banner-bg: #f2b8b5;
+    --banner-fg: #3b0a08;
+  }
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Noto Sans CJK KR", "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+  font-size: 1rem;
+  line-height: 1.75;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+header.site, main, footer.site { max-width: 44rem; margin: 0 auto; padding-left: 16px; padding-right: 16px; }
+header.site { padding-top: 20px; font-weight: 700; }
+header.site a { color: var(--fg); text-decoration: none; }
+main { padding-top: 4px; padding-bottom: 32px; }
+footer.site { border-top: 1px solid var(--line); padding-top: 12px; padding-bottom: 40px; }
+footer.site ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 4px 20px; }
+h1 { font-size: 1.6rem; line-height: 1.35; margin: 16px 0 12px; }
+h2 { font-size: 1.25rem; line-height: 1.4; margin: 36px 0 10px; padding-top: 14px; border-top: 1px solid var(--line); }
+h3 { font-size: 1.05rem; line-height: 1.45; margin: 24px 0 8px; }
+p, ul, ol, blockquote, .table-wrap { margin: 0 0 14px; }
+ul, ol { padding-left: 1.4em; }
+li { margin: 4px 0; }
+li > ul, li > ol { margin: 4px 0 0; }
+a { color: var(--link); text-underline-offset: 2px; }
+code { font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 0.9em; background: var(--soft); border: 1px solid var(--line); border-radius: 4px; padding: 0 4px; word-break: break-all; }
+blockquote { margin-left: 0; margin-right: 0; padding: 10px 14px; border-left: 4px solid var(--line); background: var(--soft); color: var(--muted); }
+blockquote > :last-child { margin-bottom: 0; }
+hr { border: 0; border-top: 1px solid var(--line); margin: 28px 0; }
+.table-wrap { overflow-x: auto; }
+table { border-collapse: collapse; font-size: 0.94rem; line-height: 1.6; }
+th, td { border: 1px solid var(--line); padding: 6px 10px; text-align: left; vertical-align: top; min-width: 5em; }
+th { background: var(--soft); }
+mark { background: var(--mark-bg); color: var(--mark-fg); padding: 0 2px; border-radius: 3px; }
+.preview-banner { position: sticky; top: 0; z-index: 1; margin: 0; padding: 8px 16px; background: var(--banner-bg); color: var(--banner-fg); font-weight: 700; text-align: center; }
+blockquote.draft { border: 2px dashed var(--banner-bg); border-left-width: 6px; color: var(--fg); }
+.page-list { padding-left: 1.2em; }
+</style>
+</head>
+<body>
+<header class="site"><a class="app-name" href="../">이사할까?</a></header>
+<main>
+<h1>계산 방식</h1>
+<p><strong>이사할까?</strong> · 규칙 표 판 11 · 기준 2026년 10월 30일 · App Store와 Google Play 공통</p>
+<p>이사할까?는 소득·자산·집 정보를 입력받아 <strong>기기 안에서만 계산하는 참고용 계산기</strong>예요. 이 글은 앱이 등급과 점수를 어떤 식과 기준으로 매기는지 그대로 적은 글이에요.</p>
+<p>숫자가 어디서 왔는지 두 가지로 나눠 적었어요.</p>
+<ul>
+<li><strong>이 앱의 기준</strong>: 이 앱이 정한 값이에요. 비중, 등급 기준, 점수 표, 계산할 때 둔 가정이 여기에 들어요. 법이 정한 값이 아니에요.</li>
+<li><strong>법·제도</strong>: 법령, 고시, 기관이 공표한 자료에서 온 값이에요. 6번 표에 출처와 기준 날짜를 적었어요.</li>
+</ul>
+<h2>1. 한눈에 보기</h2>
+<ul>
+<li>집 하나마다 네 가지를 봐요: <strong>주거비 부담</strong>, <strong>비상금</strong>, <strong>출퇴근</strong>, <strong>보증금 지키기</strong>(집을 사는 경우에는 '대출 상환').</li>
+<li>네 가지마다 등급(여유 → 적정 → 빠듯 → 위험)과 점수(0~100점)를 매겨요.</li>
+<li><strong>종합 등급은 네 등급 가운데 가장 낮은 등급</strong>이에요.</li>
+<li><strong>종합 점수는 네 점수에 비중을 곱해 더한 값</strong>이에요.</li>
+<li>지금 집과 후보 집을 같은 식으로 계산해서 나란히 보여 줘요. 차이는 '후보 집 − 지금 집'이에요.</li>
+<li>새 직장을 넣으면 후보 집은 새 직장의 소득과 출퇴근으로 계산하고, 지금 집은 지금 직장으로 계산해요.</li>
+</ul>
+<h2>2. 등급과 점수를 매기는 공통 규칙 (이 앱의 기준)</h2>
+<ul>
+<li>축마다 값 하나(지표)를 구해 등급 기준과 견줘요. 기준과 정확히 같은 값은 더 좋은 등급이에요.</li>
+<li>점수는 다섯 점(100·75·50·25·0점)을 곧은 선으로 이은 표에서 읽어요. 두 점 사이의 값은 비례로 정하고, 양 끝을 벗어나면 100점 또는 0점이에요.
+<ul>
+<li>예: 주거비 부담률 25%는 20%(75점)와 30%(50점)의 한가운데라서 62.5점이에요.</li>
+</ul>
+</li>
+<li>75·50·25점의 자리가 곧 등급이 바뀌는 자리예요.</li>
+<li>등급은 늘 지표와 기준으로 정해요. 점수를 보고 등급을 거꾸로 정하지 않아요.</li>
+<li>비율과 개월 수는 소수 여섯째 자리로 반올림한 값으로 등급과 점수를 매겨요.</li>
+<li>화면의 점수는 정수로 반올림해 보여 줘요. 종합 점수는 반올림하기 전의 점수로 계산해요.</li>
+</ul>
+<h2>3. 네 축</h2>
+<h3>3.1 주거비 부담 — 비중 35%</h3>
+<p><strong>식: 주거비 부담률 = 월 주거비 ÷ 기준 소득</strong></p>
+<p>월 주거비는 집 유형마다 이렇게 구해요.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">집 유형</th><th scope="col">월 주거비</th></tr>
+</thead>
+<tbody>
+<tr><td>월세</td><td>월세 + 관리비 + 대출금 × 대출 금리 ÷ 12 + (보증금 − 대출금) × 예금 금리 ÷ 12</td></tr>
+<tr><td>전세</td><td>대출금 × 대출 금리 ÷ 12 + 관리비 + (전세금 − 대출금) × 예금 금리 ÷ 12</td></tr>
+<tr><td>매매·내 집</td><td>매달 갚는 원리금 + 관리비 + 1년 재산세 ÷ 12 + (집값 − 대출금) × 예금 금리 ÷ 12</td></tr>
+<tr><td>가족 집</td><td>매달 보태는 돈</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>내 돈에 예금 금리를 곱하는 까닭: 보증금이나 집값에 묶인 내 돈을 예금에 두었다면 받았을 이자를 주거비로 봐요. <strong>이 앱의 기준</strong>이에요.</li>
+<li>예금 금리는 연 3.45%예요. <strong>법·제도</strong>(한국은행 공표 통계)예요.</li>
+<li>대출 금리는 넣은 값을 써요. 비우면 은행 평균 금리를 써요: 전세·월세 보증금 대출은 연 4.57%, 주택담보대출은 연 4.88%. <strong>법·제도</strong>(한국은행 공표 통계)예요. 이때는 결과에 평균 금리로 계산했다고 표시해요.</li>
+<li>매달 갚는 원리금은 원리금균등 방식으로 계산해요: 대출금 × 월 이율 ÷ (1 − (1 + 월 이율)^(−갚는 개월 수)), 월 이율 = 대출 금리 ÷ 12. 금리가 0%면 대출금 ÷ 갚는 개월 수예요. 다른 상환 방식은 아직 계산하지 않아요.</li>
+<li>재산세를 비우면 0원으로 계산하고 '재산세 미포함'이라고 표시해요.</li>
+<li>내 집의 집값은 지금 시세를 써요.</li>
+<li>내 집을 세 놓고 이사하는 경우, 후보 집의 월 주거비에 (지금 집 대출의 월 원리금 + 지금 집 1년 재산세 ÷ 12 − 받을 월세)를 더해요.</li>
+</ul>
+<p>기준 소득은 소득 유형마다 이렇게 정해요.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">소득 유형</th><th scope="col">기준 소득</th></tr>
+</thead>
+<tbody>
+<tr><td>직장인, 법인 대표</td><td>세후 월소득. 실제 월 실수령을 넣었으면 그 값, 아니면 세전 연봉 ÷ 12에서 국민연금·건강보험·장기요양보험·고용보험·소득세·지방소득세를 빼서 추정해요. 법인 대표는 고용보험을 빼지 않아요.</td></tr>
+<tr><td>개인사업자</td><td>(연 사업소득금액 − 1년 종합소득세·지방소득세 추정) ÷ 12 − 한 달 지역가입자 보험료 추정</td></tr>
+<tr><td>프리랜서</td><td>달마다 수입에서 세금 몫과 한 달 지역가입자 보험료 추정을 뺀 세후 수입을 구한 뒤, 수입이 적은 쪽으로 잡아요(아래).</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>세후 추정은 본인 1명 기준이고 비과세 식대가 없다고 봐요. <strong>이 앱의 기준</strong>(가정)이에요. 요율과 세액표는 <strong>법·제도</strong>예요.</li>
+<li>프리랜서의 기준 소득(<strong>이 앱의 기준</strong>):
+<ul>
+<li>6개월 이상 넣었으면: 넣은 달을 적은 순서로 세웠을 때 아래에서 25% 자리의 값(두 값 사이면 비례로 정해요)</li>
+<li>3~5개월 넣었으면: 가장 적은 3개월의 평균</li>
+<li>1~2개월 넣었으면: 넣은 달 평균의 80%. 결과에 '신뢰 낮음'을 표시해요.</li>
+</ul>
+</li>
+</ul>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">등급</th><th scope="col">주거비 부담률</th><th scope="col">점수 표</th></tr>
+</thead>
+<tbody>
+<tr><td>여유</td><td>20% 이하</td><td>10% → 100점, 20% → 75점</td></tr>
+<tr><td>적정</td><td>20% 넘고 30% 이하</td><td>30% → 50점</td></tr>
+<tr><td>빠듯</td><td>30% 넘고 40% 이하</td><td>40% → 25점</td></tr>
+<tr><td>위험</td><td>40% 넘음</td><td>50% → 0점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>기준 소득이 0원 이하면 위험·0점이에요.</li>
+<li>받을 월세가 더 많아 월 주거비가 마이너스면 여유·100점이에요.</li>
+</ul>
+<h3>3.2 비상금 — 비중 25%</h3>
+<p><strong>식: 비상금 개월 수 = (쓸 수 있는 돈 − 이사 목돈) ÷ (한 달 생활비 + 월 주거비)</strong></p>
+<p>이사한 뒤 남는 돈으로 수입 없이 몇 달을 버틸 수 있는지 봐요.</p>
+<ul>
+<li>쓸 수 있는 돈
+<ul>
+<li>지금 집을 볼 때: 지금 바로 쓸 수 있는 돈</li>
+<li>후보 집을 볼 때: 지금 바로 쓸 수 있는 돈 + 이사하면 돌려받는 돈
+<ul>
+<li>지금 집이 월세·전세면: 지금 집 보증금 − 그 보증금의 대출금</li>
+<li>지금 집이 가족 집이면: 더하는 돈이 없어요</li>
+<li>내 집을 팔면: 시세 − 남은 대출 − 팔 때 중개보수 − 그 밖에 팔 때 드는 돈</li>
+<li>내 집을 세 놓으면: 받을 보증금 − 세 놓을 때 중개보수</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>이사 목돈(후보 집만. 지금 집은 0원): 내 돈으로 내는 보증금이나 집값(대출금을 뺀 몫) + 취득세(집을 살 때) + 중개보수 + 이사비 + 새로 살 가구·가전
+<ul>
+<li>취득세와 중개보수는 직접 넣으면 그 값을 써요. 비우면 법이 정한 세율과 상한 요율로 추정하고, 추정했다고 결과에 표시해요. <strong>법·제도</strong>예요. 취득세는 집이 한 채라고 보고 추정해요(<strong>이 앱의 기준</strong>, 가정).</li>
+</ul>
+</li>
+<li>월 주거비는 3.1의 값이에요.</li>
+</ul>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">등급</th><th scope="col">비상금 개월 수</th><th scope="col">점수 표</th></tr>
+</thead>
+<tbody>
+<tr><td>여유</td><td>6개월 이상</td><td>12개월 → 100점, 6개월 → 75점</td></tr>
+<tr><td>적정</td><td>3개월 이상 6개월 미만</td><td>3개월 → 50점</td></tr>
+<tr><td>빠듯</td><td>1개월 이상 3개월 미만</td><td>1개월 → 25점</td></tr>
+<tr><td>위험</td><td>1개월 미만</td><td>0개월 → 0점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>쓸 수 있는 돈이 이사 목돈보다 적으면 개월 수와 관계없이 위험·0점이에요. '이사 자금 부족'이라고 표시해요.</li>
+<li>생활비와 월 주거비의 합이 0원 이하면 개월 수를 낼 수 없어요. 이사 자금이 모자라지 않으면 여유·100점이에요.</li>
+<li>대출 한도를 넣으면 '한도까지 쓰면 몇 개월인지'를 참고로 보여 줘요. 등급에는 쓰지 않아요.</li>
+</ul>
+<h3>3.3 출퇴근 — 비중 20%</h3>
+<p><strong>식: 대표 교통수단의 편도 시간(분)</strong></p>
+<ul>
+<li>시간은 지도앱에서 보고 직접 넣은 값이에요. 분 단위로 반올림해요. 앱이 거리로 시간을 어림하지 않아요.</li>
+<li>대표 교통수단은 '평소 이 수단'으로 고른 수단이에요. 고르지 않았으면 한 달 출퇴근 비용이 가장 적은 수단이에요. 비용이 같으면 시간이 짧은 수단, 그것도 같으면 대중교통 → 자차 → 택시 → 도보 → 자전거 → 셔틀 순서예요.
+<ul>
+<li>한 달 출퇴근 비용 = 왕복 시간 × 한 달 출근일 × 시급 × 50% + 한 달 교통비</li>
+<li>시급 = 세전 연소득 ÷ (52 × 일주일에 일하는 시간)</li>
+<li>한 달 출근일 = (일주일에 일하는 날 − 재택하는 날) × 52 ÷ 12</li>
+<li>세전 연소득은 직장인·법인 대표면 세전 연봉, 프리랜서면 넣은 달 수입의 평균 × 12, 개인사업자면 연 사업소득금액이에요.</li>
+<li>출퇴근 시간의 값을 시급의 50%로 치는 것은 <strong>이 앱의 기준</strong>이에요.</li>
+<li>한 달 교통비: 대중교통은 넣은 한 달 교통비(없으면 편도 요금 × 2 × 출근일), 자차는 연료비 + 회사 주차비 + 편도 통행료 × 2 × 출근일, 택시는 편도 요금 × 2 × 출근일, 셔틀은 한 달 비용, 도보·자전거는 0원이에요. 자차 연료비는 넣은 한 달 주유·충전비이고, 없으면 편도 거리 × 2 × 출근일 × km당 연료비예요.</li>
+<li>대중교통 요금을 비우면 기본요금 1,550원, km당 연료비를 비우면 전국 평균 휘발유값 ÷ 표준 연비(1,855.68원/L ÷ 11.97km/L)를 써요. <strong>법·제도</strong>(기관 공표 자료)예요.</li>
+</ul>
+</li>
+<li>출퇴근 등급은 시간으로만 매겨요. 출퇴근 비용은 대표 수단을 고를 때와 참고 금액을 보여 줄 때 써요.</li>
+</ul>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">등급</th><th scope="col">편도 시간</th><th scope="col">점수 표</th></tr>
+</thead>
+<tbody>
+<tr><td>여유</td><td>30분 이하</td><td>0분 → 100점, 30분 → 75점</td></tr>
+<tr><td>적정</td><td>30분 넘고 60분 이하</td><td>60분 → 50점</td></tr>
+<tr><td>빠듯</td><td>60분 넘고 90분 이하</td><td>90분 → 25점</td></tr>
+<tr><td>위험</td><td>90분 넘음</td><td>120분 → 0점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>출근하는 날이 없으면(전면 재택) 여유·100점이에요.</li>
+<li>출퇴근 시간을 넣지 않아 계산할 수 없으면 이 축을 비워 두고, 종합 등급과 종합 점수도 비워 둬요. 축 하나가 빠진 채 종합을 내면 실제보다 좋게 보이기 때문이에요.</li>
+</ul>
+<h3>3.4 보증금 지키기 / 대출 상환 — 비중 20%</h3>
+<p>집 유형마다 보는 것이 달라요. 화면에서는 월세·전세·가족 집이면 '보증금 지키기', 매매·내 집이면 '대출 상환'이라고 불러요.</p>
+<p><strong>월세 — 보증금과 최우선변제 금액을 견줘요</strong></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">보증금(대출금 포함 전액)</th><th scope="col">등급과 점수</th></tr>
+</thead>
+<tbody>
+<tr><td>0원</td><td>여유 · 100점</td></tr>
+<tr><td>0원 넘고 그 지역 최우선변제 금액 이하</td><td>여유 · 87.5점</td></tr>
+<tr><td>그 지역 최우선변제 금액 넘음</td><td>적정 · 62.5점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>최우선변제 금액은 집이 경매로 넘어가도 먼저 돌려받는 금액이에요. <strong>법·제도</strong>예요: 서울 5,500만 원, 과밀억제권역 등 4,800만 원, 광역시 등 2,800만 원, 그 밖의 지역 2,500만 원.</li>
+<li>등급과 점수를 세 칸으로 나눈 것은 <strong>이 앱의 기준</strong>이에요. 이 경우에는 점수 표로 비례 계산을 하지 않아요.</li>
+<li>알아 둘 점: 실제로 적용되는 금액은 그 집에 먼저 잡힌 담보가 설정된 날의 기준을 따르고, 집값의 절반 안에서만 돌려받아요. 앱은 지금 시행 중인 금액만 써요.</li>
+</ul>
+<p><strong>전세 — 식: (전세금 + 선순위 근저당) ÷ 시세</strong></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">등급</th><th scope="col">비율</th><th scope="col">점수 표</th></tr>
+</thead>
+<tbody>
+<tr><td>여유</td><td>70% 이하</td><td>60% → 100점, 70% → 75점</td></tr>
+<tr><td>적정</td><td>70% 넘고 80% 이하</td><td>80% → 50점</td></tr>
+<tr><td>빠듯</td><td>80% 넘고 90% 이하</td><td>90% → 25점</td></tr>
+<tr><td>위험</td><td>90% 넘음</td><td>100% → 0점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>전세보증보험에 가입할 수 없으면 등급을 한 단계 낮추고 점수에서 25점을 빼요(0점 아래로는 내려가지 않아요). 이미 위험이면 그대로 위험이에요. <strong>이 앱의 기준</strong>이에요.</li>
+<li>가입할 수 있는지는 넣은 값을 따라요. 넣지 않았으면 추정하고, 추정했다고 결과에 표시해요.
+<ul>
+<li>추정 방법: 세 기관(HUG, HF, SGI서울보증) 가운데 한 곳이라도 '위 비율이 90% 이하'이고 '전세금이 그 기관의 한도 이하'면 가입할 수 있다고 봐요. 한도는 HUG와 HF가 수도권 7억 원·그 밖의 지역 5억 원, SGI서울보증이 10억 원이에요. <strong>법·제도</strong>(보증기관의 상품 기준)예요.</li>
+<li>실제 가입 심사는 기관이 집값을 따로 매기는 등 더 많은 것을 봐요. 추정과 다를 수 있어요.</li>
+</ul>
+</li>
+</ul>
+<p><strong>매매·내 집 — 식: DSR = 12 × (이 집 대출의 월 원리금 + 다른 빚 월 상환액) ÷ 세전 연소득</strong></p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">등급</th><th scope="col">DSR</th><th scope="col">점수 표</th></tr>
+</thead>
+<tbody>
+<tr><td>여유</td><td>30% 이하</td><td>20% → 100점, 30% → 75점</td></tr>
+<tr><td>적정</td><td>30% 넘고 40% 이하</td><td>40% → 50점</td></tr>
+<tr><td>빠듯</td><td>40% 넘고 50% 이하</td><td>50% → 25점</td></tr>
+<tr><td>위험</td><td>50% 넘음</td><td>60% → 0점</td></tr>
+</tbody>
+</table>
+</div>
+<ul>
+<li>세전 연소득은 3.3에서 말한 값이에요(직장인은 세전 연봉).</li>
+<li>내 집을 세 놓고 다른 집을 사는 경우, 지금 집 대출의 월 원리금도 더해요.</li>
+<li>세전 연소득이 0원 이하면 위험·0점이에요.</li>
+<li>등급과 따로 경고를 붙여요. 후보 집을 새 대출로 살 때만 봐요. 경고는 등급과 점수를 바꾸지 않아요.
+<ul>
+<li>DSR이 40%를 넘으면 은행 규제 상한을 넘는다고 알려요. <strong>법·제도</strong>예요.</li>
+<li>대출금 ÷ 집값이 한도를 넘으면 알려요. 한도는 규제지역 40%, 그 밖의 지역 70%, 오피스텔 70%이고 집이 없는 사람 기준이에요. <strong>법·제도</strong>예요.</li>
+</ul>
+</li>
+<li>이 DSR은 등급을 매기려고 쓰는 값이에요. 은행이 심사할 때 쓰는 값과 다를 수 있어요.</li>
+</ul>
+<p><strong>가족 집</strong> — 보증금이 없어서 여유·100점이에요.</p>
+<p>주거용 오피스텔은 월세·전세·매매 모두 위와 같은 식으로 계산해요.</p>
+<h2>4. 종합 등급과 종합 점수 (이 앱의 기준)</h2>
+<p><strong>종합 등급 = 네 축의 등급 가운데 가장 낮은 등급</strong></p>
+<ul>
+<li>세 축이 여유여도 한 축이 위험이면 종합은 위험이에요. 가장 약한 곳이 이사의 성패를 가른다고 보기 때문이에요.</li>
+<li>종합 등급은 종합 점수와 관계없이 정해요. 그래서 점수는 높은데 등급이 낮을 수 있어요.</li>
+</ul>
+<p><strong>종합 점수 = 주거비 부담 점수 × 35% + 비상금 점수 × 25% + 출퇴근 점수 × 20% + 보증금 지키기(대출 상환) 점수 × 20%</strong></p>
+<ul>
+<li>예: 60점, 80점, 50점, 87.5점이면 21 + 20 + 10 + 17.5 = 68.5점이에요.</li>
+<li>출퇴근 축이 비어 있으면 종합 등급과 종합 점수도 비워 둬요.</li>
+<li>지금 집과의 점수 차이는 화면에 보이는 정수 점수끼리 뺀 값이에요.</li>
+</ul>
+<h2>5. 스트레스 테스트 (이용권 기능, 이 앱의 기준)</h2>
+<p>같은 식에 가정 하나만 바꿔서 다시 계산하고, 등급이 달라지는 축을 보여 줘요. 네 가지를 하나씩 따로 봐요.</p>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">가정</th><th scope="col">바꾸는 것</th></tr>
+</thead>
+<tbody>
+<tr><td>금리가 오르면</td><td>대출 금리 +2%p, 예금 금리 +1.5%p</td></tr>
+<tr><td>소득이 줄면</td><td>기준 소득과 세전 연소득 −20%</td></tr>
+<tr><td>수입이 끊기면</td><td>비상금 개월 수 −2개월</td></tr>
+<tr><td>전세 시세가 내리면</td><td>전세 집의 시세 −10%</td></tr>
+</tbody>
+</table>
+</div>
+<h2>6. 법·제도에서 온 숫자와 출처</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">숫자</th><th scope="col">지금 값</th><th scope="col">출처</th><th scope="col">기준 날짜</th></tr>
+</thead>
+<tbody>
+<tr><td>예금 금리</td><td>연 3.45%</td><td>한국은행 「금융기관 가중평균금리」 예금은행 저축성수신금리(신규취급액 기준), 2026년 9월분(잠정)</td><td>2026-10-29 공표</td></tr>
+<tr><td>주택담보대출 평균 금리</td><td>연 4.88%</td><td>같은 자료, 예금은행 주택담보대출</td><td>2026-10-29 공표</td></tr>
+<tr><td>전세자금대출 평균 금리</td><td>연 4.57%</td><td>같은 자료, 예금은행 전세자금대출</td><td>2026-10-29 공표</td></tr>
+<tr><td>최우선변제 금액</td><td>서울 5,500만 원 · 과밀억제권역 등 4,800만 원 · 광역시 등 2,800만 원 · 그 밖 2,500만 원</td><td>주택임대차보호법 시행령 제10조 제1항, 제11조</td><td>2023-02-21 시행</td></tr>
+<tr><td>전세보증 가입 기준(추정용)</td><td>비율 90% 이하, 한도 HUG·HF 수도권 7억 원·그 밖 5억 원, SGI서울보증 10억 원</td><td>HUG 전세보증금반환보증, HF 일반전세지킴보증, SGI서울보증 전세금보장신용보험 상품 안내</td><td>2026-11-02 확인</td></tr>
+<tr><td>은행 DSR 상한(경고용)</td><td>40%</td><td>은행업감독규정 별표 6</td><td>2022-07-01 시행</td></tr>
+<tr><td>대출 한도 LTV(경고용)</td><td>규제지역 40% · 수도권 비규제지역 70% · 지방 70%</td><td>금융위원회 발표(2025-09-07), 은행업감독규정 별표 6</td><td>2025-09-08 시행</td></tr>
+<tr><td>오피스텔 대출 한도(경고용)</td><td>70%</td><td>은행업감독규정 별표 6(비주택담보대출)</td><td>2021-05-17 시행</td></tr>
+<tr><td>국민연금(근로자 몫)</td><td>4.75%, 기준소득월액 41만~659만 원</td><td>국민연금법 부칙(법률 제20903호), 국민연금공단 안내</td><td>2026-01-01 시행, 기준소득월액은 2026-07-01부터</td></tr>
+<tr><td>건강보험(근로자 몫)</td><td>7.19%의 절반</td><td>국민건강보험공단 2026년도 보험료율 안내</td><td>2026-01-01 시행</td></tr>
+<tr><td>장기요양보험</td><td>건강보험료 × 0.9448% ÷ 7.19%</td><td>같은 안내</td><td>2026-01-01 시행</td></tr>
+<tr><td>고용보험(근로자 몫)</td><td>0.9%</td><td>고용보험 및 산업재해보상보험의 보험료징수 등에 관한 법률 시행령 제12조</td><td>2022-07-01 시행</td></tr>
+<tr><td>소득세</td><td>근로소득 간이세액표(공제대상가족 1명)</td><td>소득세법 시행령 별표 2(2026.2.27. 개정)</td><td>2026-03-01 적용</td></tr>
+<tr><td>지방소득세</td><td>소득세의 10%</td><td>지방세법 제103조의13</td><td>2026-10-03 확인</td></tr>
+<tr><td>대중교통 기본요금</td><td>1,550원</td><td>서울교통공사 운임 안내(수도권 지하철 성인 교통카드 기본운임)</td><td>2025-06-28 시행</td></tr>
+<tr><td>휘발유값과 표준 연비</td><td>1,855.68원/L, 11.97km/L</td><td>오피넷 보통휘발유 전국 평균, 인사혁신처 2026 공무원보수 등의 업무지침</td><td>2026-10-25</td></tr>
+</tbody>
+</table>
+</div>
+<p>표가 길어 여기에 다 옮기지 않은 것도 있어요: 취득세율(지방세법 제11조 등), 주택·오피스텔 중개보수 상한 요율(공인중개사법 시행규칙 별표 1·2), 프리랜서·개인사업자의 세금과 지역가입자 보험료 추정에 쓰는 요율(소득세법 제55조, 국세청 경비율 고시, 국민연금법, 국민건강보험법 시행령). 값과 출처는 규칙 표 파일을 공개할 때 그 파일에 모두 적어 둘게요.</p>
+<h2>7. 이 계산의 한계</h2>
+<ul>
+<li>넣은 값으로만 계산해요. 넣은 값이 실제와 다르면 결과도 달라져요.</li>
+<li>세후 소득, 취득세, 중개보수, 보증 가입은 추정이에요. 부양가족, 비과세 소득, 여러 채 보유, 기관의 개별 심사는 반영하지 않아요.</li>
+<li>금리는 지금의 평균이나 넣은 값이 이어진다고 보고 계산해요.</li>
+<li>등급은 판단을 돕는 표시예요. 이사를 하라거나 하지 말라는 권유가 아니에요.</li>
+</ul>
+<h2>8. 바뀔 수 있어요</h2>
+<p>계산식과 기준은 법·제도가 바뀌거나 사용자 의견과 사회 통념이 달라지면 고칠 수 있어요. 바뀌면 기준 날짜와 바뀐 내용을 이 페이지에 적어요.</p>
+<ul>
+<li>금리처럼 자주 공표되는 숫자는 앱이 새 규칙 표를 받아 반영해요. 지금 쓰는 규칙 표의 날짜는 앱 결과 화면의 '기준 ○○○○년 ○월 ○일'에서 볼 수 있어요.</li>
+<li>같은 값을 넣어도 규칙 표가 바뀌면 등급과 점수가 달라질 수 있어요.</li>
+</ul>
+<h2>9. 참고용 고지</h2>
+<p>이사할까?의 결과는 금융·법률 자문이 아닌 참고용 계산이에요. 넣은 값과 공개된 규칙(기준 2026년 10월 30일)으로 계산한 추정이라, 실제 대출 한도·세금·보증 가입은 은행·세무서·보증기관에서 꼭 확인해 주세요.</p>
+<h2>바뀐 내용</h2>
+<div class="table-wrap">
+<table>
+<thead>
+<tr><th scope="col">날짜</th><th scope="col">규칙 표 판</th><th scope="col">내용</th></tr>
+</thead>
+<tbody>
+<tr><td>2026년 11월 27일</td><td>11 (기준 2026년 10월 30일)</td><td>첫 판이에요.</td></tr>
+</tbody>
+</table>
+</div>
+</main>
+<footer class="site">
+<nav aria-label="다른 안내">
+<ul>
+<li><a href="../privacy/">개인정보 처리방침</a></li>
+<li><a href="../support/">문의와 도움말</a></li>
+</ul>
+</nav>
+</footer>
+</body>
+</html>
